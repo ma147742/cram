@@ -1,0 +1,113 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+class Mortgage
+{
+private:
+	double loan;// Mortage loan
+	double mPayment;// Monthly payment
+	double iRate;// Interest rate
+	int term;// The number of years that the mortgage will be payed off
+public:
+	Mortgage();//Default constructor
+	bool setAmount(double);//Mutator and checker
+	void setRate();//Mutator
+	void setTerm();//Mutator
+	void calculate();//Mutator
+	double getAmount() const;//Accesor
+	double getRate() const;//Accessor
+	double getPayment() const;//Accessor
+	int getTerm() const;//Accessor
+	
+};
+Mortgage::Mortgage()//Default Constructor
+{
+	loan = 0.0;
+	mPayment = 0.0;
+	iRate = 0.0;
+	term = 0;
+}
+
+bool Mortgage::setAmount(double a)//Check for negative numbers. If it passes, it gets passed.
+{
+	if (a > 0)
+	{
+		loan = a;
+		return true;
+	}
+	return false;
+}
+void Mortgage::setRate()//Sets rate to default
+{
+	iRate = 0;
+}
+void Mortgage::setTerm()//Sets term to default
+{
+	term = 0;
+}
+void Mortgage::calculate()//Calculates monthly payments, term, and rate
+{
+	int t = (getTerm() * 12);
+
+	double r = (getRate() / 100 / 12);
+
+	mPayment = getAmount() * r / (1.0 - pow(r + 1, -t));
+}
+double Mortgage::getAmount() const
+{
+	return loan;
+}
+double Mortgage::getRate() const
+{
+	return iRate;
+}
+double Mortgage::getPayment() const
+{
+	return mPayment;
+}
+int Mortgage::getTerm() const
+{
+	return term;
+}
+
+void getInput(Mortgage &);//Reference
+void print(const Mortgage);//Prints the monthly payment
+
+//Mortgage Driver
+int main()
+{
+	Mortgage User;
+
+	cout << "Enter the your desired loan, example would be 200000.\n" <<
+		"Then enter your term in years, example would be 30.\n" <<
+		"Lastly enter your interest rate, example would be 4.5" << endl;
+	getInput(User);//Function to get information from user
+	User.calculate();//Function to calculate monthly payment
+	print(User);//Displays the final number of the calculation
+	return 0;
+}
+void getInput(Mortgage &User)//Reference is accepted to User
+{//Ask the user to input their numbers
+	double amount = 0.0;
+	double rates = 0.0;
+	int term = 0;
+
+	cout << "Enter loan amount: ";
+	cin >> amount;
+	while (User.setAmount(amount) == false)//Checks for a negative number
+	{
+		cout << "Enter loan amount: ";
+		cin >> amount;
+	}
+
+	cout << "Enter interest rate: ";
+	cin >> rates;
+	cout << "Enter the number of year for the term: ";
+	cin >> term;
+}
+void print(const Mortgage User)//Goes to the const with the user info
+{
+	cout << "Monthly Payment is " << User.getPayment() << endl;
+}
